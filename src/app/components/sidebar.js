@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; 
 import { signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
+import { useState, useEffect } from "react";
 
 import User from "../assets/user.png";
 import Home from "../assets/home.svg";
@@ -13,6 +14,14 @@ import Setting from "../assets/setting.svg";
 
 const Sidebar = () => {
   const router = useRouter();
+  const [user, setUser] = useState(null);
+
+  console.log(user);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(setUser); // Listen for user state changes
+    return () => unsubscribe(); // Clean up the subscription
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -24,91 +33,92 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="bg-[#11101D] w-[17rem] h-[100vh] flex flex-col items-start justify-start">
-      <div className="flex items-center h-[6rem] w-full px-4 bg-[#1D1B31]">
+    <div className="bg-[#11101D] w-[90%] max-w-[17rem] h-screen flex flex-col items-start justify-start p-4">
+      <div className="flex items-center w-full mb-8">
         <Image
           className="mr-4 rounded-full"
-          src={User}
-          alt="logo"
+          src={user?.photoURL || User} // Fallback to a default image if no photoURL
+          alt="User Photo"
           width={45}
           height={45}
+          layout="fixed"
         />
-        <div className="text-white font-medium text-xl">User</div>
+        <div className="text-white font-medium text-xl truncate">
+          {user?.displayName || "User"}
+        </div>
       </div>
 
-      <div className="w-full flex flex-col items-start justify-start h-auto mt-[2rem] gap-4">
-        <Link
-          className="h-[3rem] w-[16.8rem] pl-6 flex items-center justify-start hover:bg-[#1D1B31]"
-          href="/"
-        >
-          <Image
-            className="mr-4"
-            src={Home}
-            alt="logo"
-            width={30}
-            height={30}
-          />
-          <span className="text-white p-2 font-normal text-[1.2rem]">Home</span>
-        </Link>
-
-        <Link
-          className="h-[3rem] w-[16.8rem] pl-6 flex items-center justify-start hover:bg-[#1D1B31]"
-          href="/all-bills"
-        >
-          <Image
-            className="mr-4"
-            src={Bill}
-            alt="logo"
-            width={30}
-            height={30}
-          />
-          <span className="text-white p-2 font-normal text-[1.2rem]">
-            All Bills
+      <div className="flex flex-col w-full gap-4">
+        <Link href="/">
+          <span className="flex items-center w-full h-[3rem] px-2 hover:bg-[#1D1B31]">
+            <Image
+              src={Home}
+              alt="Home Icon"
+              width={30}
+              height={30}
+            />
+            <span className="ml-2 text-white p-2 font-normal text-[1.2rem]">
+              Home
+            </span>
           </span>
         </Link>
 
-        <Link
-          className="h-[3rem] w-[16.8rem] pl-6 flex items-center justify-start hover:bg-[#1D1B31]"
-          href="/all-clients"
-        >
-          <Image
-            className="mr-4"
-            src={Users}
-            alt="logo"
-            width={30}
-            height={30}
-          />
-          <span className="text-white p-2 font-normal text-[1.2rem]">
-            All Clients
+        <Link href="/all-bills">
+          <span className="flex items-center w-full h-[3rem] px-2 hover:bg-[#1D1B31]">
+            <Image
+              src={Bill}
+              alt="Bills Icon"
+              width={30}
+              height={30}
+            />
+            <span className="ml-2 text-white p-2 font-normal text-[1.2rem]">
+              All Bills
+            </span>
           </span>
         </Link>
 
-        <Link
-          className="h-[3rem] w-[16.8rem] pl-6 flex items-center justify-start hover:bg-[#1D1B31]"
-          href="/setting"
-        >
-          <Image
-            className="mr-4"
-            src={Setting}
-            alt="logo"
-            width={30}
-            height={30}
-          />
-          <span className="text-white p-2 font-normal text-[1.2rem]">
-            Setting
+        <Link href="/all-clients">
+          <span className="flex items-center w-full h-[3rem] px-2 hover:bg-[#1D1B31]">
+            <Image
+              src={Users}
+              alt="Clients Icon"
+              width={30}
+              height={30}
+            />
+            <span className="ml-2 text-white p-2 font-normal text-[1.2rem]">
+              All Clients
+            </span>
+          </span>
+        </Link>
+
+        <Link href="/setting">
+          <span className="flex items-center w-full h-[3rem] px-2 hover:bg-[#1D1B31]">
+            <Image
+              src={Setting}
+              alt="Setting Icon"
+              width={30}
+              height={30}
+            />
+            <span className="ml-2 text-white p-2 font-normal text-[1.2rem]">
+              Setting
+            </span>
           </span>
         </Link>
       </div>
 
-      <div onClick={handleLogout} className="absolute bottom-[0px] flex items-center h-auto w-[16.8rem] pl-6 p-4 cursor-pointer bg-[#1D1B31] mt-[3rem]">
+      <div
+        onClick={handleLogout}
+        className="mt-auto py-2 px-4 w-full flex items-center justify-start bg-[#1D1B31] hover:bg-[#37334c] rounded-lg cursor-pointer"
+      >
         <Image
-          className="mr-4 "
-          src={Logout}
-          alt="logo"
+          src= {Logout}
+          alt="Logout Icon"
           width={25}
           height={25}
         />
-        <div className="text-white font-normal text-[1.2rem]">Logout</div>
+        <span className="ml-2 text-white font-normal text-[1.2rem]">
+          Logout
+        </span>
       </div>
     </div>
   );

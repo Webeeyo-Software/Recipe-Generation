@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { ref, set, onValue, remove, update, off } from "firebase/database";
-import { database } from "../firebaseConfig"; 
+import { ref, onValue, set, remove, update } from "firebase/database";
+import { database } from "../firebaseConfig";
 import useAuth from "../auth/AuthProvider";
 import Sidebar from "../components/sidebar";
-import ClientModal from "../components/clientModal"; 
+import ClientModal from "../components/clientModal";
 
 const Clients = () => {
   const { user, loading } = useAuth();
@@ -28,16 +28,16 @@ const Clients = () => {
       setClients(clientList);
     });
 
-    return () => unsubscribe();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [user]);
 
   const handleAddOrUpdateClient = (client) => {
-    if (client.id) {
-      update(ref(database, "clients/" + client.id), client);
-    } else {
-      const newClientId = `client_${Date.now()}`;
-      set(ref(database, "clients/" + newClientId), client);
-    }
+    const clientId = client.id || `client_${Date.now()}`;
+    set(ref(database, "clients/" + clientId), client);
     setModalOpen(false);
   };
 
@@ -47,8 +47,18 @@ const Clients = () => {
   };
 
   const handleAddNew = () => {
-    setCurrentClient(null);
+    setCurrentClient({
+      Name: "",
+      email: "",
+      phone: "",
+      address: "",
+      recivedAmount: "0",
+    });
     setModalOpen(true);
+  };
+
+  const deleteClient = (clientId) => {
+    remove(ref(database, "clients/" + clientId));
   };
 
   if (loading) return <p>Loading...</p>;

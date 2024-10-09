@@ -3,10 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   overflow: hidden;
 }
 
-bg {
-  background-color: #159407;
-}

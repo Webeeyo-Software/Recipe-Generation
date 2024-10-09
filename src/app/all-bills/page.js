@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { ref, onValue, set, remove } from "firebase/database";
-import { database } from "../firebaseConfig"; // Ensure this path is correct
+import { database } from "../firebaseConfig"; 
 import useAuth from "../auth/AuthProvider";
 import Sidebar from "../components/sidebar";
 
