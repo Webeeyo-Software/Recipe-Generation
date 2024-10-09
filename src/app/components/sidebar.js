@@ -12,7 +12,7 @@ import Bill from "../assets/bills.svg";
 import Users from "../assets/users.svg";
 import Setting from "../assets/setting.svg";
 
-import Logo from "../assets/logo.png";
+import Logo from "../assets/Logo.png";
 
 const Sidebar = () => {
   const router = useRouter();
