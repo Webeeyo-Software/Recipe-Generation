@@ -144,7 +144,7 @@ export default function Home() {
                     {bill.paymentMode}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <button
+                    {/* <button
                       onClick={() => {
                         setEditingBill(bill);
                         setIsModalOpen(true);
@@ -152,7 +152,7 @@ export default function Home() {
                       className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
                     >
                       Edit
-                    </button>
+                    </button> */}
                     <button
                       onClick={() => handleDeleteBill(bill.id)}
                       className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 ml-2"
